@@ -1,9 +1,18 @@
 import robot from "robotjs"
-import express from "express"
+import express, { urlencoded } from "express"
+import cors from "cors"
 
 const app = express()
-const PORT = 3000 
+const PORT = 3000
 
-app.get("/", (req, res)=> res.send("Hello World!"))
+app.use(urlencoded({ extended: true }))
+app.use(cors())
 
-app.listen(PORT, console.log("Server running on http://localhost:"+PORT))
+app.get("/", (req, res) => res.send("Hello World!"))
+app.post("/type", (req, res) => {
+    robot.typeString(req.body.text)
+    res.send(200)
+}
+)
+
+app.listen(PORT, console.log("Server running on http://localhost:" + PORT))
