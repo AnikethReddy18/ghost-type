@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ghost Typer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top left, #febaba, #28e4c8);
+            color: #e4e4e4;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgb(33, 33, 33);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            width: 90%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            color: #7c5cff;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #2e2e2e;
+            border-radius: 0.5rem;
+            background: #1a1a1a;
+            color: #eee;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input {
+            margin-bottom: 1rem;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #7c5cff;
+            box-shadow: 0 0 8px #7c5cff55;
+        }
+
+        button {
+            background: linear-gradient(90deg, #7c5cff, #9f74ff);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(124, 92, 255, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #555;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Ghost Typer </h1>
+        <form id="ghostForm" onsubmit="sendText(event)">
+            <input type="text" id="ip" placeholder="Enter your PC IP" required />
+            <textarea id="text" placeholder="Type something spooky..." rows="6" required></textarea>
+            <button type="submit">Send Text</button>
+        </form>
+        <footer>krish and balti boy</footer>
+    </div>
+
+    <script>
+        async function sendText(e) {
+            e.preventDefault();
+
+            const ip = document.getElementById("ip").value.trim();
+            const text = document.getElementById("text").value.trim();
+
+            if (!ip || !text) {
+                alert("Please enter both IP and text!");
+                return;
+            }
+
+            try {
+                const res = await fetch(`http://${ip}:3000/type`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: text,
+                })
+
+                if (res.ok) {
+                    alert("Message sent successfully!");
+                    document.getElementById("text").value = "";
+                } else {
+                    alert("Error: " + res.status);
+                }
+            } catch (err) {
+                alert("Failed to connect. Check IP or network.");
+                console.error(err);
+            }
+        }
+    </script>
+</body>
+
+</html>
